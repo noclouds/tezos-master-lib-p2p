@@ -1,0 +1,37 @@
+(library
+ (name tezos_base)
+ (public_name tezos-base)
+ (modules :standard \ Get-git-info)
+ (flags (:standard -w -30
+                   -open Tezos_stdlib
+                   -open Tezos_crypto
+                   -open Tezos_data_encoding
+                   -open Tezos_error_monad
+                   -open Tezos_rpc
+                   -open Tezos_clic
+                   -open Tezos_micheline
+                   -open Tezos_event_logging
+                   -safe-string))
+ (libraries tezos-stdlib
+            tezos-crypto
+            tezos-data-encoding
+            tezos-error-monad
+            tezos-event-logging
+            tezos-rpc
+            tezos-clic
+            tezos-micheline
+            re.str
+            ptime
+            ezjsonm
+            lwt
+            ipaddr))
+
+(rule
+    (targets generated_git_info.ml)
+    (deps get-git-info.ml)
+    (action (with-stdout-to %{targets} (run %{ocaml} unix.cma %{deps}))))
+
+(alias
+ (name runtest_lint)
+ (deps (glob_files *.ml{,i}))
+ (action (run %{lib:tezos-tooling:lint.sh} %{deps})))

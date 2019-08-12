@@ -1,0 +1,14 @@
+(library
+ (name tezos_data_encoding)
+ (public_name tezos-data-encoding)
+ (libraries tezos-stdlib
+            ocplib-json-typed
+            ocplib-json-typed-bson
+            zarith
+            ezjsonm)
+ (flags (:standard -open Tezos_stdlib)))
+
+(alias
+ (name runtest_lint)
+ (deps (glob_files *.ml{,i}))
+ (action (run %{lib:tezos-tooling:lint.sh} %{deps})))

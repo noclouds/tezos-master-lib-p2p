@@ -1,0 +1,37 @@
+(executable
+ (name main)
+ (public_name tezos-node)
+ (libraries tezos-base
+            tezos-stdlib-unix
+            tezos-shell-services
+            tezos-rpc-http-server
+            tezos-p2p
+            tezos-shell
+            tezos-storage
+            tezos-shell-context
+            tezos-protocol-updater
+            tezos-embedded-protocol-genesis
+            tezos-embedded-protocol-demo-noops
+            tezos-embedded-protocol-alpha
+            cmdliner
+            tls)
+ (flags (:standard -open Tezos_base__TzPervasives
+                   -open Tezos_stdlib_unix
+                   -open Tezos_shell_services
+                   -open Tezos_rpc_http
+                   -open Tezos_rpc_http_server
+                   -open Tezos_p2p
+                   -open Tezos_shell
+                   -open Tezos_storage
+                   -open Tezos_shell_context
+                   -open Tezos_protocol_updater
+                   -linkall)))
+
+(install
+ (section bin)
+ (files (tezos-sandboxed-node.sh as tezos-sandboxed-node.sh)))
+
+(alias
+ (name runtest_lint)
+ (deps (glob_files *.ml{,i}))
+ (action (run %{lib:tezos-tooling:lint.sh} %{deps})))

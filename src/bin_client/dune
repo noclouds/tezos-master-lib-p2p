@@ -1,0 +1,32 @@
+(executables
+ (names main_client main_admin)
+ (public_names tezos-client tezos-admin-client)
+ (libraries tezos-base
+            tezos-rpc-http-client
+            tezos-shell-services
+            tezos-client-base
+            tezos-client-commands
+            tezos-client-genesis
+            tezos-client-alpha
+            tezos-stdlib-unix
+            tezos-client-base-unix
+            tezos-client-alpha-commands.registration
+            tezos-baking-alpha-commands.registration
+            tezos-signer-backends.unix)
+  (flags (:standard -open Tezos_base__TzPervasives
+                    -open Tezos_rpc_http_client
+                    -open Tezos_stdlib_unix
+                    -open Tezos_shell_services
+                    -open Tezos_client_base
+                    -open Tezos_client_commands
+                    -open Tezos_client_base_unix
+                    -linkall)))
+
+(install
+ (section bin)
+ (files (tezos-init-sandboxed-client.sh as tezos-init-sandboxed-client.sh)))
+
+(alias
+ (name runtest_lint)
+ (deps (glob_files *.ml{,i}))
+ (action (run %{lib:tezos-tooling:lint.sh} %{deps})))
